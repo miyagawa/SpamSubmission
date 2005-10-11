@@ -1,0 +1,29 @@
+<TMPL_INCLUDE NAME="header.tmpl">
+
+<!-- Begin main content -->
+
+<div id="cfg-prefs">
+
+<TMPL_IF NAME=MESSAGE>
+  <p class="message"><TMPL_VAR NAME=MESSAGE></p>
+</TMPL_IF>
+<form method="post" action="<TMPL_VAR NAME=SCRIPT_URL>">
+    <input type="hidden" name="__mode" value="feed_new" />
+    <!-- input type="hidden" name="magic_token" value="<TMPL_VAR NAME=MAGIC_TOKEN>" / --> 
+
+    <h2><MT_TRANS phrase="Add a feed"></h2>
+    <p><MT_TRANS phrase="Write the URL of a feed to subscribe. MT Feed Reader supports RSS and Atom."></p>
+
+    <div class="field">
+    <p>
+    <label for="feed_url">Feed URL:</label> <input value="<TMPL_VAR NAME=FEED_LINK ESCAPE=HTML>" type="text" name="feed_link" id="feed_url" size="50" />
+    </p>
+    </div>
+    <p>
+    <input type="submit" value="<MT_TRANS phrase="Add">" />
+    </p>
+</form>
+
+</div>
+
+<TMPL_INCLUDE NAME="footer.tmpl">

@@ -1,0 +1,73 @@
+<TMPL_INCLUDE NAME="header.tmpl">
+
+<!-- Begin main content -->
+
+<div id="cfg-prefs">
+
+<TMPL_IF NAME="MESSAGE">
+  <p class="message"><TMPL_VAR NAME="MESSAGE"></p>
+</TMPL_IF>
+
+<TMPL_UNLESS NAME="ERROR">
+<TMPL_IF NAME="BLOG_NAME"><h2>Podcasts of <TMPL_VAR NAME="BLOG_NAME"></h2></TMPL_IF>
+
+<div class="tabs">
+<ul>
+<li class="yah"><a href="<TMPL_VAR NAME="SCRIPT_URL">?__mode=default"><MT_TRANS phrase="Podcasts"></a></li>
+<li class="special">
+<img src="<TMPL_VAR NAME=STATIC_URI>/images/status_icons/create.gif" alt="<MT_TRANS phrase="Upload podcast">" width="9" height="9" />&nbsp;<a href="<TMPL_VAR NAME=SCRIPT_URL>?__mode=upload_podcast&amp;blog_id=<TMPL_VAR NAME=BLOG_ID>">Upload podcast</a>
+</li>
+<li class="special"><a href="<TMPL_VAR NAME="SCRIPT_URL">?__mode=default">Rebuild feed</a></li>
+</ul>
+</div>
+
+<TMPL_IF NAME="PODCASTS">
+    <div class="list" id="podcasts">
+    <table cellspacing="0">
+    <thead>
+    <tr>
+        <th width="15%">Date</th>
+        <th width="40%">Title</th>
+        <th width="34%">Artist</th>
+        <th width="15%">Size</th>
+        <th width="1%">&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <TMPL_LOOP NAME="PODCAST_LOOP">
+    <tr class="<TMPL_IF NAME="PODCAST_ODD">odd<TMPL_ELSE>even</TMPL_IF>">
+        <td nowrap><TMPL_VAR NAME="PODCAST_DATE"></td>
+        <td><a href="<TMPL_VAR NAME=SCRIPT_URL>?__mode=edit_podcast&blog_id=<TMPL_VAR NAME="BLOG_ID">&file=<TMPL_VAR NAME="PODCAST_KEY">" title="<TMPL_VAR NAME="PODCAST_ALT_DESCRIPTION">"><TMPL_IF NAME="PODCAST_ALT_TITLE"><TMPL_VAR NAME="PODCAST_ALT_TITLE"><TMPL_ELSE><TMPL_IF NAME="PODCAST_TITLE"><TMPL_VAR NAME="PODCAST_TITLE"><TMPL_ELSE><TMPL_VAR NAME="PODCAST_FILE"></TMPL_IF></TMPL_IF></a></td>
+        <td><TMPL_VAR NAME="PODCAST_ARTIST"></td>
+        <td align="right"><TMPL_VAR NAME="PODCAST_SIZE"></td>
+        <td><input type="checkbox" name="id" value="<TMPL_VAR NAME="PODCAST_KEY">">&nbsp;</td>
+    </tr>
+    </TMPL_LOOP>
+    </tbody>
+    </table>
+</TMPL_IF>
+</TMPL_UNLESS>
+<hr />
+
+<div align="right">
+<form action="<TMPL_VAR NAME=SCRIPT_URL>" onsubmit="return false;">
+<TMPL_IF NAME=PREV_OFFSET>
+<input type="button" onclick="window.location='<TMPL_VAR NAME=SCRIPT_URL>?__mode=list_podcasts&amp;blog_id=<TMPL_VAR NAME=BLOG_ID>&amp;<TMPL_IF NAME=IS_POWER_EDIT>&amp;</TMPL_IF>limit=' + this.form.limit.options[this.form.limit.selectedIndex].value + '&amp;offset=<TMPL_VAR NAME=PREV_OFFSET_VAL>'" value="<MT_TRANS phrase="Previous [_1]" params="<TMPL_VAR NAME=LIMIT>">" />
+</TMPL_IF>
+<select name="limit" onchange="window.location='<TMPL_VAR NAME=SCRIPT_URL>?__mode=list_podcasts&amp;blog_id=<TMPL_VAR NAME=BLOG_ID>&amp;<TMPL_IF NAME=IS_POWER_EDIT>is_power_edit=1&amp;</TMPL_IF>limit=' + this.options[this.selectedIndex].value + '<TMPL_VAR NAME=FILTER_ARGS>'">
+<option value="5"<TMPL_IF NAME=LIMIT_5> selected="selected"</TMPL_IF>><MT_TRANS phrase="[quant,_1,podcast,podcasts]" params="5"></option>
+<option value="20"<TMPL_IF NAME=LIMIT_20> selected="selected"</TMPL_IF>><MT_TRANS phrase="[quant,_1,podcast,podcasts]" params="20"></option>
+<option value="75"<TMPL_IF NAME=LIMIT_75> selected="selected"</TMPL_IF>><MT_TRANS phrase="[quant,_1,podcast,podcasts]" params="75"></option>
+<option value="125"<TMPL_IF NAME=LIMIT_125> selected="selected"</TMPL_IF>><MT_TRANS phrase="[quant,_1,podcast,podcasts]" params="125"></option>
+<option value="none"<TMPL_IF NAME=LIMIT_NONE> selected="selected"</TMPL_IF>><MT_TRANS phrase="all podcasts"></option>
+</select>
+<TMPL_IF NAME=NEXT_OFFSET>
+<input type="button" onclick="window.location='<TMPL_VAR NAME=SCRIPT_URL>?__mode=list_podcasts&amp;blog_id=<TMPL_VAR NAME=BLOG_ID>&amp;<TMPL_IF NAME=IS_POWER_EDIT>is_power_edit=1&amp;</TMPL_IF>limit=' + this.form.limit.options[this.form.limit.selectedIndex].value + '&amp;offset=<TMPL_VAR NAME=NEXT_OFFSET_VAL><TMPL_VAR NAME=FILTER_ARGS>'" value="<MT_TRANS phrase="Next [_1]" params="<TMPL_VAR NAME=LIMIT>">" />
+</TMPL_IF>
+</form>
+</div>
+
+
+    
+<TMPL_INCLUDE NAME="footer.tmpl">

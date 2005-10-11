@@ -1,0 +1,25 @@
+<TMPL_INCLUDE NAME="header.tmpl">
+
+<form method="post" enctype="multipart/form-data" action="<TMPL_VAR NAME=SCRIPT_URL>">
+<input type="hidden" name="__mode" value="upload_file" />
+<input type="hidden" name="blog_id" value="<TMPL_VAR NAME=BLOG_ID>" />
+<input type="hidden" name="site_path" value="1" />
+<input type="hidden" name="extra_path_site" value="podcasts" />
+
+<h2><MT_TRANS phrase="Upload File">: <span class="title-highlight"><TMPL_VAR NAME=BLOG_NAME ESCAPE=HTML></span></h2>
+
+<h4><MT_TRANS phrase="Choose a File"></h4>
+<p><MT_TRANS phrase="To upload a file to your server, click on the browse button to locate the file on your hard drive."></p>
+<p><label for="file"><MT_TRANS phrase="File:"></label> <input type="file" name="file" /></p>
+
+<h4><MT_TRANS phrase="Destination"></h4>
+<p>&lt;<MT_TRANS phrase="Local Site Path">&gt; / podcasts</p>
+
+<div>
+<input type="submit" value="<MT_TRANS phrase="Upload">" />
+</div>
+
+<input type="hidden" name="magic_token" value="<TMPL_VAR NAME=MAGIC_TOKEN>" />
+</form>
+
+<TMPL_INCLUDE NAME="footer.tmpl">
