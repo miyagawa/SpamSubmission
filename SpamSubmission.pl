@@ -66,10 +66,21 @@ sub submit_spams {
     $ua->agent($plugin->name . "/" . $plugin->version);
     $ua->timeout(5);
 
-    my $res = $ua->post("http://bulkfeeds.net/app/submit_spam", {
+    my $res = $ua->post("http://bulkfeeds.net/app/submit_spam.xml", {
         url => join("\n", @$urls_ref),
         %apikeys,
     });
+
+    if ($res->is_success) {
+        my $xml = $res->content;
+        if ($xml =~ m!<error>(.*)</error>!) {
+            MT::log("error: $1");
+        } else {
+            MT::log("success");
+        }
+    } else {
+        MT::log("Submit API failure: " . $res->code);
+    }
 }
 
 sub prepare_apikeys {
