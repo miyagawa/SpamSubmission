@@ -27,6 +27,40 @@ MT->add_plugin($plugin);
 
 sub instance { $plugin }
 
+sub init_app {
+    my $plugin = shift;
+    $plugin->SUPER::init_app(@_);
+    my($app) = @_;
+
+    return unless $app->isa('MT::App::CMS');
+
+    $app->add_itemset_action({
+        type => 'comment',
+        key  => 'spam_submission_comment',
+        label => 'Report SPAM Comment(s)',
+        code => sub { $plugin->submit_spams_action('MT::Comment', @_) },
+    });
+
+    $app->add_itemset_action({
+        type => 'ping',
+        key  => 'spam_submission_ping',
+        label => 'Report SPAM TrackBack(s)',
+        code => sub { $plugin->submit_spams_action('MT::TBPing', @_) },
+    });
+}
+
+sub submit_spams_action {
+    my $plugin = shift;
+    my($class, $app) = @_;
+    my @obj = map $class->load($_), $app->param('id');
+    my @urls;
+    for my $obj (@obj) {
+        push @urls, uniq(find_uris($obj->all_text));
+    }
+    submit_spams(\@urls) if @urls;
+    $app->build_page($plugin->load_tmpl('results.tmpl'), { urls => [ map { +{value => $_} } @urls ], return_url => $app->return_uri });
+}
+
 sub uniq {
     my @list = @_;
     my %uniq;
@@ -40,6 +74,7 @@ for my $class (qw(MT::Comment MT::TBPing)) {
     my $old = $class->can('junk');
     *{$class . "::junk"} = sub {
         my $obj = shift;
+        my $config = MT::Plugin::SpamSubmission->instance->get_config_hash;
         my @urls = uniq(find_uris($obj->all_text));
         submit_spams(\@urls);
         $obj->$old(@_);
@@ -75,8 +110,6 @@ sub submit_spams {
         my $xml = $res->content;
         if ($xml =~ m!<error>(.*)</error>!) {
             MT::log("error: $1");
-        } else {
-            MT::log("success");
         }
     } else {
         MT::log("Submit API failure: " . $res->code);

@@ -1,0 +1,18 @@
+<TMPL_INCLUDE NAME=header.tmpl>
+
+<h2>Bulk Spam Submission</h2>
+
+<TMPL_UNLESS NAME=URLS>
+<p class="message">No URL found in the comments/trackbacks.</p>
+<TMPL_ELSE>
+Following domains have been reported as Spam to Bulkfeeds.
+<ul>
+<TMPL_LOOP NAME=URLS>
+<li><TMPL_VAR NAME=VALUE ESCAPE=HTML></li>
+</TMPL_LOOP>
+</ul>
+</TMPL_UNLESS>
+
+<p><a href="<TMPL_VAR NAME=RETURN_URL ESCAPE=HTML>">Return</a></p>
+
+<TMPL_INCLUDE NAME=footer.tmpl>
